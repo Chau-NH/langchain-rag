@@ -1,8 +1,8 @@
-import { CallbackManagerForRetrieverRun } from "langchain/callbacks";
 import {
   BaseRetriever,
   type BaseRetrieverInput,
-} from "langchain/schema/retriever";
+} from "@langchain/core/retrievers";
+import type { CallbackManagerForRetrieverRun } from "@langchain/core/callbacks/manager";
 import { Document } from "@langchain/core/documents";
 
 export interface CustomRetrieverInput extends BaseRetrieverInput {}
@@ -19,7 +19,6 @@ export class CustomRetriever extends BaseRetriever {
     runManager?: CallbackManagerForRetrieverRun
   ): Promise<Document[]> {
     return [
-
       new Document({
         pageContent: "Facebook was founded by Mark Zuckerberg along with his college roommates Eduardo Saverin, Andrew McCollum, Dustin Moskovitz, and Chris Hughes in February 2004. It initially started as a social networking platform exclusively for Harvard University students before expanding to other universities and eventually the general public",
         metadata: {id: 1},

@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express, { Express, Request, Response} from "express"
 import langchain from "./langchain";
-import langchainWithoutVectorStores from "./langchain-without-vectorstores";
+import langchainRetrievalWithoutVectorStores from "./langchain-retrieval-without-vectorstores";
 
 
 const app: Express = express();
@@ -12,9 +12,9 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
 });
 
-app.get("/without-vector-stores", (req: Request, res: Response) => {
-  langchainWithoutVectorStores();
-  res.send("Express + TypeScript Server");
+app.get("/langchain-retrieval-without-vector-stores", (req: Request, res: Response) => {
+  langchainRetrievalWithoutVectorStores();
+  res.send("LangChain RAG");
 });
 
 app.listen(port, () => {
