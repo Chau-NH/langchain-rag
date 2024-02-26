@@ -19,9 +19,11 @@ const langchainRetrievalWithoutVectorStores = async () => {
 
   const systemTemplate = `Answer the question based only on the following context.
 1. If you don't know the answer, don't try to make up an answer.
-2. The assistant produces creative responses. 
+2. The assistant produces creative responses.
+3. Add links and title together related to the quesion if it exists in provided context.
 ----------------
 {context}`;
+
   const messages = [
     SystemMessagePromptTemplate.fromTemplate(systemTemplate),
     HumanMessagePromptTemplate.fromTemplate("{question}"),
@@ -38,9 +40,12 @@ const langchainRetrievalWithoutVectorStores = async () => {
     model,
     outputParser,
   ]);
-  const response = await chain.invoke("Who is Mark?");
+  const question = "What is NodeJS ?";
+  const response = await chain.invoke(question);
 
-  console.log(response);
+  console.log(`User question: ${question}`);
+  console.log('---------------------------');
+  console.log(`AI answer: ${response}`);
 };
 
 export default langchainRetrievalWithoutVectorStores;
