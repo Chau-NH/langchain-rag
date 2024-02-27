@@ -20,7 +20,7 @@ const langchainRetrievalWithoutVectorStores = async () => {
   const systemTemplate = `Answer the question based only on the following context.
 1. If you don't know the answer, don't try to make up an answer.
 2. The assistant produces creative responses.
-3. Add link and title related to the quesion together if it exists in provided context.
+3. Add 3 links and titles related to the quesion together if they exist in provided context.
 ----------------
 {context}`;
 

@@ -1,7 +1,14 @@
 # LANGCHAIN - RAG
 
+## Prerequisites
+
+- NodeJS version >18.x
+
 ## Installation
 
+```sh
+npm install -S langchain
+```
 
 ## Env variables
 
