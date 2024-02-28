@@ -2,6 +2,7 @@ import "dotenv/config";
 import express, { Express, Request, Response} from "express"
 import langchain from "./langchain";
 import langchainRetrievalWithoutVectorStores from "./langchain-retrieval-without-vectorstores";
+import langchainBedrock from "./langchain-bedrock";
 
 
 const app: Express = express();
@@ -14,6 +15,11 @@ app.get("/", (req: Request, res: Response) => {
 
 app.get("/langchain-retrieval-without-vector-stores", (req: Request, res: Response) => {
   langchainRetrievalWithoutVectorStores();
+  res.send("LangChain RAG");
+});
+
+app.get("/langchain-bedrock", (req: Request, res: Response) => {
+  langchainBedrock();
   res.send("LangChain RAG");
 });
 

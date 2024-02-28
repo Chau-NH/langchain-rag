@@ -3,6 +3,7 @@
 ## Prerequisites
 
 - NodeJS version >18.x
+- OpenAI Account
 
 ## Installation
 
