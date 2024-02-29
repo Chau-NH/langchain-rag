@@ -11,7 +11,6 @@ import {
 } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { CustomRetriever } from "./utils/CustomRetriever";
-import { ParsedQs } from "qs";
 
 const langchain = async (
   userQuestion: any
