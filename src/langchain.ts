@@ -1,48 +1,51 @@
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
-import { HNSWLib } from "@langchain/community/vectorstores/hnswlib";
+import { ChatOpenAI } from "@langchain/openai";
 import { formatDocumentsAsString } from "langchain/util/document";
-import { PromptTemplate } from "@langchain/core/prompts";
+import {
+  ChatPromptTemplate,
+  HumanMessagePromptTemplate,
+  SystemMessagePromptTemplate,
+} from "@langchain/core/prompts";
 import {
   RunnableSequence,
   RunnablePassthrough,
 } from "@langchain/core/runnables";
 import { StringOutputParser } from "@langchain/core/output_parsers";
+import { CustomRetriever } from "./utils/CustomRetriever";
+import { ParsedQs } from "qs";
 
-const langchain = async () => {
+const langchain = async (
+  userQuestion: any
+) => {
   const model = new ChatOpenAI({});
   const outputParser = new StringOutputParser();
-  const vectorStore = await HNSWLib.fromTexts(
-    [
-      // Result 1
-      "Facebook was founded by Mark Zuckerberg along with his college roommates Eduardo Saverin, Andrew McCollum, Dustin Moskovitz, and Chris Hughes in February 2004. It initially started as a social networking platform exclusively for Harvard University students before expanding to other universities and eventually the general public",
+  const retreiver = new CustomRetriever({});
 
-      // Result 2
-      "Facebook allows users to create profiles, connect with friends and family, share updates, photos, videos, and links, join groups, create pages for businesses, organizations, or public figures, and engage with content through likes, comments, and shares.",
+  const systemTemplate = `Answer the question based only on the following context.
+1. If you don't know the answer, don't try to make up an answer.
+2. The assistant produces creative and structured responses.
+3. Add 3 links and titles related to the quesion together if they exist in provided context.
+----------------
+{context}`;
 
-      // Result 3
-      "Facebook has billions of active users worldwide. As of my last update, it had over 2.8 billion monthly active users. This makes it one of the most popular social networking platforms globally."
-    ],
-    [{id : 1}, {id : 2}, {id : 3}],
-    new OpenAIEmbeddings()
-  );
-  const retreiver = vectorStore.asRetriever(1) ;
-  const prompt = PromptTemplate.fromTemplate(`Answer the question based only on the following context:
-  {context}
-  
-  Question: {question}`);
+  const messages = [
+    SystemMessagePromptTemplate.fromTemplate(systemTemplate),
+    HumanMessagePromptTemplate.fromTemplate("{question}"),
+  ];
+
+  const prompt = ChatPromptTemplate.fromMessages(messages);
 
   const chain = RunnableSequence.from([
     {
       context: retreiver.pipe(formatDocumentsAsString),
-      question: new RunnablePassthrough()
+      question: new RunnablePassthrough(),
     },
     prompt,
     model,
-    outputParser
+    outputParser,
   ]);
-  const response = await chain.invoke("What is Facebook?");
- 
-  console.log(response);
+
+  const response = await chain.invoke(userQuestion);
+  return `AI ANSWER: \n ${response}`;
 };
 
 export default langchain;
